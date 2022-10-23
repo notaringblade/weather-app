@@ -1,5 +1,7 @@
-import React, {useEffect, useState} from "react";
-import { flushSync } from "react-dom";
+import React, {useState} from "react";
+import DropdownLocations from "./components/dropdown";
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 function App() {
   const weather_api = {
@@ -8,16 +10,10 @@ function App() {
   }
 
   const [searchValue, setSearchValue] = useState('');
-  const [value, setValue] = useState('')
+  const [value, setValue] = useState('Goa')
   const [weather, setWeather] = useState({});
 
-  // useEffect(() => {
-  //   console.log(value);
   
-    
-  // }, [value])
-  
-
   function formatDate(newDate) {
     const months = {
       0: 'January',
@@ -54,7 +50,6 @@ function App() {
           console.log(searchValue);
           setSearchValue('');
           setWeather(result);
-          console.log(result);
         });
     }
   }
@@ -69,19 +64,14 @@ function App() {
         });
   }
 
-  const numbers = ['goa','London'];
-  const listItems = numbers.map((number) =>  <div onClick={()=> { setValue(number)}}>{number}</div>);
-
-  useEffect(() => {
-    // console.log(value);
-    dropDown();
-  }, [value]);
+  
   
   return (
     
     <div className={(typeof weather.main !== 'undefined')? ((weather.main.temp > 20)? 'main hot': 'main'): 'main'}>
       <div className="main-body">
 
+        <DropdownLocations weather={weather} dropDown={dropDown} setValue={setValue} value={value} />
       <div className="search-area">
           <input 
             type="text"
@@ -93,7 +83,7 @@ function App() {
             />
       </div>
 
-      <p>{listItems}</p>
+      
 
       {(typeof weather.main !== 'undefined'? (
         <div className="weather-display">
