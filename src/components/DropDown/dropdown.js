@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import listOfLocations from './listOfLocations';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
 import './dropDown.css';
@@ -28,12 +27,7 @@ export default function DropdownLocations({weather, setValue, dropDown, value}) 
 
     
     useEffect(() => {
-        // if(weather.main.temp){
-        //     setcolor("light")
-
-        // }else{
-        //     setcolor("dark")
-        // }
+        
         dropDown();
         console.log(value)
     }, [value]);
@@ -42,12 +36,12 @@ export default function DropdownLocations({weather, setValue, dropDown, value}) 
     
     return (
         <div className="dropDown">
-        <Dropdown isOpen={modal} toggle={toggle} >
-        <DropdownToggle caret>Choose Location</DropdownToggle>
-        <DropdownMenu dark className='dropDownMenu'>
-          {listItems}
-        </DropdownMenu>
-      </Dropdown>
+          <Dropdown isOpen={modal} toggle={toggle} >
+          <DropdownToggle caret>Choose Location</DropdownToggle>
+          <DropdownMenu dark className='dropDownMenu'>
+            {listItems}
+          </DropdownMenu>
+        </Dropdown>
       </div>
   
     
