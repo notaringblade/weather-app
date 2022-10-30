@@ -1,0 +1,29 @@
+.main-history{
+    height: 100px;
+    overflow-y: scroll;
+    min-height: 100vh;
+    min-width: 100vh;
+    padding: 75px;
+    color: black;
+    transition: 1s ease-out;
+    background-color: #282c34;
+}
+.historyMain{
+    border: solid black 3px;
+    margin: 10px;
+    border-radius: 20px;
+    padding: 15px;
+    /* background-color: #B3DAFB; */
+    background-image: url('https://wallpaperaccess.com/full/3604053.jpg');
+    background-size: cover;
+}
+.historyMain.hot{
+    background-image: url('https://wallpapercave.com/wp/wp6048769.jpg');
+    background-size: cover;
+    color: white;
+    border: solid white 2px;
+}
+.history-items{
+    line-height: 2;
+    font-size: 17px;
+}

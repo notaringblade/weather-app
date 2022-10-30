@@ -1,8 +1,10 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import DropdownLocations from "../DropDown/dropdown";
 import './search.css';
-import { Button } from "reactstrap";
+import Weather from "../weather";
+import { HistoryContext } from "../history/historyContext";
+import format from "date-fns/format";
 
 export default function Search() {
 
@@ -12,9 +14,13 @@ export default function Search() {
       }
     
       const [searchValue, setSearchValue] = useState('');
-      const [value, setValue] = useState('Goa');
+      const [initValue, setinitValue] = useState('Goa')
+      const [value, setValue] = useState('');
       const [weather, setWeather] = useState({});
-    
+      const [historyValue, setHistoryValue] = useState('');
+
+      const History = useContext(HistoryContext);
+
       
       function formatDate(newDate) {
         const months = {
@@ -41,7 +47,25 @@ export default function Search() {
         const formatted = `${dayName}, ${date} ${monthName} ${year}`
         return formatted.toString()
       }
-    
+      
+
+      function addToHistory()  {
+        console.log(historyValue);
+        const newHistory = {
+          location: historyValue,
+          searchedTime: format(new Date(), 'Pp' ),
+          storedWeather: {weather}
+          
+          // tempratureHistory: weather.main.temp,
+          // accurateLocation: weather.sys.country
+          
+        } 
+
+        console.log(historyValue);
+        History.setHistory([newHistory, ...History.history]);
+        
+      }
+
       
     
       const search = evt => {
@@ -49,15 +73,38 @@ export default function Search() {
           fetch(`${weather_api.base}weather?q=${searchValue}&units=metric&APPID=${weather_api.key}`)
             .then(res => res.json())
             .then(result => {
-              console.log(searchValue);
-
               
-              setSearchValue('');
+              console.log(searchValue);
+              console.log(historyValue);
               setWeather(result);
+              setHistoryValue(searchValue);
+              setSearchValue('');
+
+
             });
         }
       }
       
+      useEffect(() => {
+        fetch(`${weather_api.base}weather?q=${initValue}&units=metric&APPID=${weather_api.key}`)
+            .then(res => res.json())
+            .then(result => {
+              setWeather(result);
+              setSearchValue('');
+            });
+      }, [initValue])
+      
+
+      useEffect(() => {
+        if(typeof weather.main !== 'undefined' ){
+          console.log(historyValue)
+          addToHistory();
+          setSearchValue('');
+          console.log(History.history)
+        }else{
+          console.log("Undefined")
+        }
+      }, [historyValue])
       
     
       const dropDown = () =>{
@@ -67,6 +114,7 @@ export default function Search() {
               setSearchValue('');
               setWeather(result);
               console.log(result);
+              setHistoryValue(value);
             });
       }
       
@@ -87,30 +135,10 @@ export default function Search() {
         </div>
   
         
-          <DropdownLocations weather={weather} dropDown={dropDown} setValue={setValue} value={value} />
+          <DropdownLocations weather={weather} dropDown={dropDown} setValue={setValue} value={value} setHistoryValue={setHistoryValue}/>
   
-  
-        {(typeof weather.main !== 'undefined'? (
-          <div className="weather-display">
-          <div>
-            {weather.name}, {weather.sys.country}
-          </div>
-  
-          <div>
-            {Math.round(weather.main.temp)} °C
-          </div>
-  
-          <div>
-            <p>{formatDate(new Date())}</p>
-          </div>
-  
-          <div>
-            {weather.weather[0].main}, {weather.weather[0].description}
-          </div>
-
-
-        </div>
-        ): ('Enter a Valid Location'))}
+          <Weather historyValue={historyValue} weather = {weather} formatDate={formatDate}/>
+        
         </div>
         
 

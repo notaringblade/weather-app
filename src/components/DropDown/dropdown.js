@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
+import { Button, Dropdown, DropdownMenu, DropdownToggle } from 'reactstrap';
 import './dropDown.css';
-import { City } from 'country-state-city';
 
-export default function DropdownLocations({weather, setValue, dropDown, value}) {
+export default function DropdownLocations({setHistoryValue, setValue, dropDown, value}) {
     
     const [modal, setModal] = useState(false);
-    const [color, setcolor] = useState("dark")
 
 
     const toggle = () => setModal(!modal);
@@ -18,7 +16,7 @@ export default function DropdownLocations({weather, setValue, dropDown, value}) 
 
     const listItems = Locations.map((locations) =>  
     <div>
-        <Button outline="true" color='light' onClick={()=> { toggle(); setValue(locations.name)}}>{locations.name}</Button>
+        <Button outline="true" color='light' onClick={()=> { toggle(); setValue(locations.name); }}>{locations.name}</Button>
 
     </div>
     );
@@ -30,6 +28,7 @@ export default function DropdownLocations({weather, setValue, dropDown, value}) 
         
         dropDown();
         console.log(value)
+        
     }, [value]);
     
 
